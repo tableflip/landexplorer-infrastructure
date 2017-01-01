@@ -1,24 +1,22 @@
 # Set up postgres and postgis
 
-# https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04
 # https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postgis-on-ubuntu-14-04
 
-- name: add ubuntugis apt repo
+- name: Add ubuntugis apt repo
   become: yes
   apt_repository: repo='ppa:ubuntugis/ppa'
 
-- name: Install postgresql
+- name: Install postgresql and posgis
   become: yes
   apt: name={{ item }} state=present
   with_items:
     - postgresql
     - postgresql-contrib
     - postgis
-    - gdal-bin
 
-# - name: Copy postgresql.conf
-#   become: yes
-#   template: src=postgresql.conf dest=/etc/postgresql/9.3/main/postgresql.conf owner=postgres group=postgres mode=0644 force=yes
+- name: Copy postgresql.conf
+  become: yes
+  template: src=postgresql-9.5.conf dest=/etc/postgresql/9.5/main/postgresql.conf owner=postgres group=postgres mode=0644 force=yes
 
 - name: Enable and restart postgres service
   become: yes

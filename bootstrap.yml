@@ -10,4 +10,4 @@
     - nginx
     - node
     - postgis
-    # - api
+    - api
