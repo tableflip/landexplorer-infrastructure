@@ -1,0 +1,4 @@
+.vagrant
+*.log
+bootstrap.retry
+deploy.retry

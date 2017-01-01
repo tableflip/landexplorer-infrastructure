@@ -1,0 +1,6 @@
+[app]
+api.landexplorer.uk
+
+# See: `group_vars/production.yaml` for group specific vars
+[production]
+api.landexplorer.uk

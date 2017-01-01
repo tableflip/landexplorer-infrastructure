@@ -1,0 +1,13 @@
+- hosts: app
+  gather_facts: no # Required to allow install python2
+  pre_tasks:
+    - name: 'Install python2' # Required for Ansible
+      raw: sudo apt-get -y install python-simplejson
+  roles:
+    # - apt-update
+    - bootstrap
+    - ufw
+    - nginx
+    - node
+    - postgis
+    # - api

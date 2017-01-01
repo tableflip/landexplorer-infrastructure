@@ -1,0 +1,28 @@
+{
+  "ping": {
+    "interval": 60000,
+    "services": {{ secrets.upmon.ping.services | to_json }}
+  },
+  "mail": {
+    "from": "{{secrets.upmon.mail.from}}",
+    "to": {{ secrets.upmon.mail.to | to_json }},
+    "transport": {
+      "service": "{{secrets.upmon.mail.transport.service}}",
+      "auth": {
+        "user": "{{secrets.upmon.mail.transport.auth.user}}",
+        "pass": "{{secrets.upmon.mail.transport.auth.pass}}"
+      }
+    }
+  },
+  "sms": {
+    // SMS provider config
+    "messagebird": {
+      "accessKey": "{{secrets.upmon.sms.messagebird.accessKey}}",
+      "originator": "{{secrets.upmon.sms.messagebird.originator}}",
+      "recipients": "{{secrets.upmon.sms.messagebird.recipients}}"
+    }
+  },
+  "graf": {
+    "port": 3000
+  }
+}

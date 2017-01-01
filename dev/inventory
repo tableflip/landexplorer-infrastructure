@@ -1,0 +1,6 @@
+[app]
+dev.api.landexplorer.uk
+
+# See: `group_vars/dev.yaml` for group specific vars
+[dev]
+dev.api.landexplorer.uk
