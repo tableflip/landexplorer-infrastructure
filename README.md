@@ -38,7 +38,21 @@ ansible-playbook -i production bootstrap.yml --extra-vars "ansible_user=root"
 ansible-playbook -i production deploy.yml
 ```
 
-## More info
+## Populate the database
+
+Once the vm is boostrapped as above, next we need to grab the data.
+This'll take about 1hr, so go have some lunch.
+
+As `root` do:
+
+```
+cd /home/landexplorer-api/current/src/bin
+./init.sh --create-db
+parallel --jobs +1 --eta ./init.sh < files.txt
+./init.sh --index
+```
+
+## More info on Ansible
 
 ```sh
 ├── Vagrantfile        # Test the scripts locally with `vagrant up`
