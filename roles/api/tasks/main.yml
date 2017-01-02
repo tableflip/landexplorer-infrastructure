@@ -1,7 +1,11 @@
+# postgresql-server-dev-9.5 for building node pg-native bindings.
+# gdal-bin for ogr2ogr to import gml files to pg.
+# parallel because wizard.
 - name: Add tools for munging geo data
   become: yes
   apt: name={{item}} state=present
   with_items:
+    - postgresql-server-dev-9.5
     - gdal-bin
     - unzip
     - parallel
@@ -65,3 +69,14 @@
   template: src=nginx.conf dest=/etc/nginx/conf.d/{{service}}.conf mode=0644 force=yes
   notify:
     - Restart Nginx
+
+# TODO: this simplifies data importing, but we should find a better way.
+- name: Make root a db superuser
+  become: yes
+  command: /usr/bin/createuser --superuser root
+  ignore_errors: yes
+
+- name: Make landexplorer-api a db user
+  become: yes
+  command: /usr/bin/createuser {{service}} --
+  ignore_errors: yes
