@@ -27,7 +27,7 @@ Vagrant.configure(2) do |config|
       ansible.extra_vars = {
         ansible_user: "vagrant"
       }
-      ansible.verbose = "vvv"
+      ansible.verbose = "v"
     end
   end
 

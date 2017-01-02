@@ -40,7 +40,7 @@
 - name: Install our npm dependencies
   become: yes
   become_user: "{{service}}"
-  shell: npm install --production
+  shell: npm install --production --cache-min 999999
   args:
     chdir: "{{ deploy_helper.new_release_path }}/src"
   notify:
@@ -73,10 +73,12 @@
 # TODO: this simplifies data importing, but we should find a better way.
 - name: Make root a db superuser
   become: yes
+  become_user: postgres
   command: /usr/bin/createuser --superuser root
   ignore_errors: yes
 
-- name: Make landexplorer-api a db user
+- name: Make db user for app
   become: yes
-  command: /usr/bin/createuser {{service}} --
+  become_user: postgres
+  command: /usr/bin/psql -c "CREATE USER \"{{secrets.postgres.username}}\" WITH PASSWORD '{{secrets.postgres.password}}'"
   ignore_errors: yes

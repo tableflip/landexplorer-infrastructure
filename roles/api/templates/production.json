@@ -2,8 +2,9 @@
   "port": 3000,
   "host": "localhost",
   "postgres": {
-    "db": "landexplorer",
-    "username": null,
-    "password": null
+    "host": "{{secrets.postgres.host}}",
+    "db": "{{secrets.postgres.db}}",
+    "username": "{{secrets.postgres.username}}",
+    "password": "{{secrets.postgres.password}}"
   }
 }
