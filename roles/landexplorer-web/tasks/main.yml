@@ -1,0 +1,59 @@
+- name: Ensure the base dir exists
+  become: yes
+  file:
+    path: /var/www/{{service}}
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0775
+
+# ---- Deploy! ---- See: http://docs.ansible.com/ansible/deploy_helper_module.html
+- name: Initialize the deploy root and gather facts
+  become: yes
+  deploy_helper: path=/var/www/{{service}}
+
+- name: Create the release dir
+  become: yes
+  file: path={{ deploy_helper.new_release_path }} state=directory owner=root group=www-data mode=0775
+
+- name: Clone the project to the new release folder
+  become: yes
+  git: dest={{ deploy_helper.new_release_path }} repo=https://github.com/{{repo}}.git version=HEAD depth=1 update=yes force=yes
+
+- name: Add an unfinished file, to allow cleanup on successful finalize
+  become: yes
+  file: state=touch path={{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}
+
+- name: Install our npm dependencies
+  become: yes
+  shell: npm install --production --cache-min 999999
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+
+- name: Install our npm dependencies
+  become: yes
+  shell: npm run build
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+
+- name: Finalize the deploy, removing the unfinished file and switching the symlink
+  become: yes
+  deploy_helper: path=/var/www/{{service}} release={{ deploy_helper.new_release }} state=finalize
+
+# ---- END deploy_helper
+
+- name: Ensure symlink to html dir exists
+  become: yes
+  file:
+    src: /var/www/{{service}}/current/dist
+    dest: /var/www/{{service}}/html
+    state: link
+    owner: www-data
+    group: www-data
+    mode: 0775
+
+- name: Copy Nginx config
+  become: yes
+  template: src=http.conf dest=/etc/nginx/conf.d/{{service}}.conf mode=0644 force=yes
+  notify:
+    - Restart Nginx

@@ -1,0 +1,7 @@
+- name: Install letsencrypt
+  become: yes
+  apt: name=letsencrypt state=present
+
+- name: Ensure the well-known webroot dir exists
+  become: yes
+  file: path=/var/www/well-known state=directory mode=0755 owner=www-data group=www-data
