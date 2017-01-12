@@ -5,7 +5,7 @@
 
 - name: Create https cert
   become: yes
-  command: /usr/bin/certbot-auto certonly --webroot -w /var/www/well-known --domain {{inventory_hostname}} --agree-tos --keep-until-expiring --email {{tls_cert_email}} --quiet
+  command: /usr/bin/letsencrypt certonly --webroot -w /var/www/well-known --domain {{inventory_hostname}} --agree-tos --keep-until-expiring --email {{tls_cert_email}} --non-interactive
   args:
     creates: /etc/letsencrypt/live/{{inventory_hostname}}/cert.pem
   notify:
@@ -13,7 +13,7 @@
 
 - name: Set cron to renew certs
   become: yes
-  cron: name="certbot renew" minute="27" hour="7" day="3" job="/usr/bin/certbot-auto renew >> /var/log/letsencrypt-cron.log"
+  cron: name="letsencrypt renew" minute="27" hour="7" day="3" job="/usr/bin/letsencrypt renew --agree-tos >> /var/log/letsencrypt-cron.log"
 
 - name: Set cron to reload nginx
   become: yes

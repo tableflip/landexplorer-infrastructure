@@ -14,7 +14,7 @@
 
 - name: Create the release dir
   become: yes
-  file: path={{ deploy_helper.new_release_path }} state=directory owner={{service}} group=www-data mode=0775
+  file: path={{ deploy_helper.new_release_path }} state=directory owner=root group=www-data mode=0775
 
 - name: Clone the project to the new release folder
   become: yes
