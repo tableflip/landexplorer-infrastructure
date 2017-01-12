@@ -1,0 +1,12 @@
+# deploy-web.yml
+# - Assumes you have run bootstrap.yml to install pre-requists.
+- hosts: web
+  gather_facts: no
+  roles:
+    - apt-update
+    - landexplorer-web
+
+- hosts: web:&production
+  gather_facts: no
+  roles:
+    - landexplorer-web-letsencrypt
