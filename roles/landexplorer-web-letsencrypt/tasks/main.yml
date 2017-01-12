@@ -1,4 +1,4 @@
-# Assumes `frontend` has been run. Requires a non-ssl configured nginx to be running for the domain.
+# Assumes `landexplorer-web` has been run. Requires a non-ssl configured nginx to be running for the domain.
 - name: Ensure nginx is running
   become: yes
   service: name=nginx state=reloaded
