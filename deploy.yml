@@ -1,7 +1,22 @@
 # deploy.yml
 # - Assumes you have run bootstrap.yml to install pre-requists.
-- hosts: app
+- hosts: api
   gather_facts: no
   roles:
     - apt-update
     - api
+
+- hosts: web
+  gather_facts: no
+  roles:
+    - landexplorer-web
+
+- hosts: web:&production
+  gather_facts: no
+  roles:
+    - landexplorer-web-letsencrypt
+
+- hosts: api:&production
+  gather_facts: no
+  roles:
+    - landexplorer-api-letsencrypt

@@ -1,13 +1,26 @@
-- hosts: app
+- hosts: api
   gather_facts: no # Required to allow install python2
   pre_tasks:
     - name: 'Install python2' # Required for Ansible
       raw: sudo apt-get -y install python-simplejson
   roles:
-    # - apt-update
+    - apt-update
     - bootstrap
     - ufw
+    - letsencrypt
     - nginx
     - node
     - postgis
-    - api
+    - landexplorer-api
+
+- hosts: web
+  roles:
+    - landexplorer-web
+
+- hosts: web:&production
+  roles:
+    - landexplorer-web-letsencrypt
+
+- hosts: api:&production
+  roles:
+    - landexplorer-api-letsencrypt
