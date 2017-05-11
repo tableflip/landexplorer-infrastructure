@@ -24,6 +24,12 @@
   become: yes
   file: state=touch path={{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}
 
+- name: Copy app config
+  become: yes
+  template: src=config.json dest={{ deploy_helper.new_release_path }}/src/config.json mode=0644 force=yes
+  notify:
+    - Restart Nginx
+
 - name: Install our npm dependencies
   become: yes
   shell: npm install --production --cache-min 999999
